@@ -1,0 +1,67 @@
+﻿@model List<CrudWithADO.NET.Models.Employee>
+@{
+    ViewData["Title"] = "Employee";
+    var errorMessage = TempData["errorMessage"]?.ToString();
+    var successMessage = TempData["successMessage"]?.ToString();
+}
+<h3>@ViewData["Title"]?.ToString()</h3>
+<hr />
+@if(!string.IsNullOrWhiteSpace(@successMessage)){
+    <div>
+        <b>Success : </b>@successMessage
+        <button type="button" class="btn-primary"></button>
+    </div>
+}
+else if(!string.IsNullOrWhiteSpace(errorMessage)){
+    <div>
+        <b>Error : </b>@errorMessage
+        <button type="button" class="btn-success"></button>
+    </div>
+}
+
+<form>
+    <button asp-action = "Create" asp-controller="Employee" class="btn btn-primary"> Create Employee</button>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Date Of Birth</th>
+                <th>Email</th>
+                <th>Salary</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model!= null && Model.Any())
+            {
+                @foreach(var employee in Model)
+                {
+                    <tr>
+                        <td>@employee.Id</td>
+                        <td>@employee.FullName</td>
+                        <td>@employee.DateOfBirth.ToString("dd/MM/yyyy")</td>
+                        <td>@employee.Email</td>
+                        <td>@employee.Salary</td>
+                        <td>
+                            <div>
+                                <a asp-controller="Employee" asp-action="Edit" asp-route-id="@employee.Id" class="btn btn-secondary">Edit</a>
+                                <a asp-controller="Employee" asp-action="Delete" asp-route-id="@employee.Id" class="btn btn-danger">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6">
+                        <div>
+                            No Employees available at this moment!
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
